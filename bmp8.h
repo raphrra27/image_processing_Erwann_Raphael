@@ -10,8 +10,9 @@ typedef struct {
     unsigned int dataSize;
     } t_bmp8;
     
+    //To save an image
     t_bmp8 *bmp8_loadImage(const char *filename);
-    //To savec an image
+    //To save an image
     void bmp8_saveImage(const char * filename, t_bmp8 * img);
     //to free the memory of the momery allocated
     void bmp8_free(t_bmp8 * img);
@@ -23,4 +24,7 @@ typedef struct {
     void bmp8_brightness(t_bmp8 * img, int value);
     //threshold function
     void bmp8_threshold(t_bmp8 *img, int threshold);
+    //to apply the ends of the filters 
+    void bmp8_applyFilter(t_bmp8 * img, float ** kernel, int kernelSize);
+
     
