@@ -1,3 +1,5 @@
+
+#include <stdio.h>
 typedef struct {
     unsigned char header[54];
     unsigned char colorTable[1024];
