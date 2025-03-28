@@ -25,6 +25,6 @@ typedef struct {
     //threshold function
     void bmp8_threshold(t_bmp8 *img, int threshold);
     //to apply the ends of the filters 
-    void bmp8_applyFilter(t_bmp8 * img, float ** kernel, int kernelSize);
+    //void bmp8_applyFilter(t_bmp8 * img, float ** kernel, int kernelSize);
 
     
