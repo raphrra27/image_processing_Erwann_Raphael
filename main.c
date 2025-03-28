@@ -28,7 +28,6 @@ int main() {
             case 1:
                 printf("Enter file path: ");
                 scanf("%255s", filename);
-                while(getchar() != '\n'); // Flush stdin
 
                 if (image) {
                     bmp8_free(image);  // Free previous image
@@ -46,7 +45,7 @@ int main() {
                 } else {
                     printf("Enter save file path: ");
                     scanf("%255s", saveFilename);
-                    while(getchar() != '\n'); // Flush stdin
+
                     bmp8_saveImage(saveFilename, image);
                     printf("Image saved successfully.\n");
                 }
@@ -67,7 +66,7 @@ int main() {
                     printf("    8. Return to previous menu\n");
                     printf(">>>>> Your choice: ");
                     scanf("%d", &filterChoice);
-                    while(getchar() != '\n'); // Flush stdin
+
 
                     switch (filterChoice) {
                         case 1:
@@ -78,7 +77,7 @@ int main() {
                         case 2:
                             printf("Enter brightness adjustment value: ");
                             scanf("%d", &bright);
-                            while(getchar() != '\n'); // Flush stdin
+
                             bmp8_brightness(image, bright);
                             printf("Brightness filter applied.\n");
                             break;
@@ -86,7 +85,7 @@ int main() {
                         case 3:
                             printf("Enter threshold (0-255): ");
                             scanf("%d", &thresh);
-                            while(getchar() != '\n'); // Flush stdin
+
                             bmp8_threshold(image, thresh);
                             printf("Threshold filter applied.\n");
                             break;
