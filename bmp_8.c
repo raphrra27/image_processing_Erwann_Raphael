@@ -2,6 +2,7 @@
 #include <string.h>
 #include "bmp8.h"
 
+//To load the image
 t_bmp8 *bmp8_loadImage(const char *filename) {
     FILE *image = fopen(filename, "rb");
 
@@ -56,6 +57,7 @@ t_bmp8 *bmp8_loadImage(const char *filename) {
     return bmpImage;
 }
 
+//To save the image in the same folder or repository
 void bmp8_saveImage(const char * filename, t_bmp8 * img) {
     //open the file for writing in binary mode
     FILE *file = fopen(filename, "wb");
@@ -109,7 +111,7 @@ void bmp8_printInfo(t_bmp8 * img){
 }
 
 
-//negative function
+//filter negative function
 void bmp8_negative(t_bmp8 * img){
     for (int i = 0; i < img->height; i++){
         for (int j = 0; j < img->width; j++){
@@ -118,7 +120,7 @@ void bmp8_negative(t_bmp8 * img){
     }
 }
 
-//brghtness function
+//filter brghtness function
 void bmp8_brightness(t_bmp8 * img, int value){
     for (int i = 0; i < img->height; i++) {
         for (int j = 0; j < img->width; j++) {
@@ -135,7 +137,7 @@ void bmp8_brightness(t_bmp8 * img, int value){
     }
 }
 
-//threshold function
+//filter threshold function
 void bmp8_threshold(t_bmp8 *img, int threshold) {
     for (int i = 0; i < img->height; i++) {
         for (int j = 0; j < img->width; j++) {
@@ -148,5 +150,14 @@ void bmp8_threshold(t_bmp8 *img, int threshold) {
             }
         }
     }
+}
+
+//For the filter with the kernel
+//faire un parcours de l'image sauf les bords applique le programme et mettre le pixel dans une copie de l'image pour eviter les problemes, les pixels de bords en change pas !!! 
+//donc faire un nouvelle image avec free etc a la fin 
+void bmp8_applyFilter(t_bmp8 * img, float ** kernel, int kernelSize) {
+    int width = img->width;
+    int height = img->height;
+
 }
 
