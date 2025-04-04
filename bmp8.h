@@ -12,39 +12,6 @@ typedef struct {
 
 //Definition of the kernel used in the apply filter
 //For the blur
-float boxBlur[3][3] = {
-    {1.0/9, 1.0/9, 1.0/9},
-    {1.0/9, 1.0/9, 1.0/9},
-    {1.0/9, 1.0/9, 1.0/9}
-};
-
-//For the gaussian
-float gaussianBlur[3][3] = {
-    {1.0/16, 2.0/16, 1.0/16},
-    {2.0/16, 4.0/16, 2.0/16},
-    {1.0/16, 2.0/16, 1.0/16}
-};
-
-//For the outline
-float outline[3][3] = {
-    {-1, -1, -1},
-    {-1, 8, -1},
-    {-1, -1, -1}
-};
-
-//For the edge detection
-float edgeDetection[3][3] = {
-    {-1, -1, -1},
-    {-1,  8, -1},
-    {-1, -1, -1}
-};
-
-//For the sharpen
-float sharpen[3][3] = {
-    { 0, -1,  0},
-    {-1,  5, -1},
-    { 0, -1,  0}
-};
 
 
     
