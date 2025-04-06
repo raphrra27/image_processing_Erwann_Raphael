@@ -150,3 +150,34 @@ void bmp8_threshold(t_bmp8 *img, int threshold) {
     }
 }
 
+
+
+
+void bmp8_applyFilter(t_bmp8 * img, float ** kernel, int kernelSize) {
+    //going through the whole image
+    for (int y = 1; y < img->height-1; y++) {
+        for (int x = 1; x < img->width-1; x++) {
+
+            float newvalue = 0.0;
+
+            //by going through the kernel matrix
+            for (int i = -kernelSize/2; i <= kernelSize/2; i++ ) {
+                for (int j = -kernelSize/2; j <= kernelSize/2; j++) {
+
+                    int neighborX = x + j;
+                    int neighborY = y + i;
+                    int index = neighborY * img->width + neighborX;
+                    newvalue += img->data[index] * kernel[i+ kernelSize/2][j+ kernelSize/2];
+                }
+            }
+            //now that it's computed, we can apply the new value to the pixel
+            int currentIndex = y * img->width + x;
+            if (newvalue > 255) {
+                newvalue = 255;
+            } else if (newvalue < 0) {
+                newvalue = 0;
+            }
+            img->data[currentIndex] = newvalue;
+        }
+    }
+}

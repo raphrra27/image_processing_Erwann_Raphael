@@ -1,5 +1,5 @@
-
 #include <stdio.h>
+
 typedef struct {
     unsigned char header[54];
     unsigned char colorTable[1024];
@@ -23,4 +23,7 @@ typedef struct {
     void bmp8_brightness(t_bmp8 * img, int value);
     //threshold function
     void bmp8_threshold(t_bmp8 *img, int threshold);
+//apply a filter using matrices
+    void bmp8_applyFilter(t_bmp8 * img, float ** kernel, int kernelSize);
+
     
