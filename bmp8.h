@@ -21,6 +21,26 @@ typedef struct {
     } t_bmp_header;
 
 typedef struct {
+        uint32_t size;
+        int32_t width;
+        int32_t height;
+        uint16_t planes;
+        uint16_t bits;
+        uint32_t compression;
+        uint32_t imagesize;
+        int32_t xresolution;
+        int32_t yresolution;
+        uint32_t ncolors;
+        uint32_t importantcolors;
+        } t_bmp_info;
+    
+typedef struct {
+        uint8_t red;
+        uint8_t green;
+        uint8_t blue;
+        } t_pixel;
+    
+typedef struct {
     t_bmp_header header;
     t_bmp_info header_info;
     int width;
@@ -28,26 +48,6 @@ typedef struct {
     int colorDepth;
     t_pixel **data;
     } t_bmp24;
-
-typedef struct {
-    uint32_t size;
-    int32_t width;
-    int32_t height;
-    uint16_t planes;
-    uint16_t bits;
-    uint32_t compression;
-    uint32_t imagesize;
-    int32_t xresolution;
-    int32_t yresolution;
-    uint32_t ncolors;
-    uint32_t importantcolors;
-    } t_bmp_info;
-
-typedef struct {
-    uint8_t red;
-    uint8_t green;
-    uint8_t blue;
-    } t_pixel;
 
 
 // Offsets for the BMP header
