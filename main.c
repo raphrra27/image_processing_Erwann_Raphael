@@ -1,4 +1,5 @@
 #include "bmp8.h"
+#include "bmp24.h"
 #include <stdio.h>
 
 // To launch gcc main.c bmp_8.c -o image_processing
