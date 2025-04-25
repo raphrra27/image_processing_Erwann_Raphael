@@ -77,7 +77,6 @@ void bmp8_saveImage(const char * filename, t_bmp8 * img) {
     //BMP color table
     size_t ColorTable = fwrite(img->colorTable, sizeof(unsigned char), 1024, file);
     if (ColorTable != 1024) {
-
         printf("Error during the writing of color table");
         fclose(file);
         return;
@@ -86,7 +85,6 @@ void bmp8_saveImage(const char * filename, t_bmp8 * img) {
     //bMP pixel data
     size_t dataWritten = fwrite(img->data, sizeof(unsigned char), img->dataSize, file);
     if (dataWritten != img->dataSize) {
-
         printf("Error during the writing of pixel data");
         fclose(file);
         return;
@@ -149,7 +147,6 @@ void bmp8_threshold(t_bmp8 *img, int threshold) {
         }
     }
 }
-
 
 
 

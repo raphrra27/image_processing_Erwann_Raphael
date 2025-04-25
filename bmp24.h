@@ -17,7 +17,6 @@
 
 
 
-
 typedef struct {
     uint16_t type;
     uint32_t size;
@@ -68,4 +67,6 @@ void bmp24_readPixelValue (t_bmp24 * image, int x, int y, FILE * file);
 void bmp24_readPixelData (t_bmp24 * image, FILE * file);
 void bmp24_writePixelValue (t_bmp24 * image, int x, int y, FILE * file);
 void bmp24_writePixelData (t_bmp24 * image, FILE * file);
+t_bmp24 * bmp24_loadImage (const char * filename);
+void bmp24_saveImage (t_bmp24 * img, const char * filename);
 
