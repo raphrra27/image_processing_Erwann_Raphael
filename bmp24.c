@@ -3,16 +3,19 @@
 #include <string.h>
 
 t_pixel ** bmp24_allocateDataPixels (int width, int height) {
+    //allocating memory for the array of array of pixels
     t_pixel **pixels = (t_pixel **)malloc(sizeof(t_pixel *) * height);
     if (pixels == NULL) {
         printf("Not enough memory to allocate");
         return NULL;
     }
     for (int i = 0; i < height; i++) {
+        //goes through the rows to allocate memory of the sub arrays
         pixels[i] = (t_pixel*)malloc(width * sizeof(t_pixel));
         if (pixels[i]==NULL) {
             printf("No enough memory to allocate");
             for (int j = 0; j < i; j++) {
+                //if fail, it must free each column one by one
                 free(pixels[j]);
             }
             return NULL;
@@ -22,6 +25,7 @@ t_pixel ** bmp24_allocateDataPixels (int width, int height) {
 }
 
 void bmp24_freeDataPixels (t_pixel ** pixels, int height) {
+    //loop that goes through all the rows and frees them
     for (int i = 0; i < height; i++) {
         free(pixels[i]);
     }
@@ -29,17 +33,20 @@ void bmp24_freeDataPixels (t_pixel ** pixels, int height) {
 }
 
 t_bmp24 * bmp24_allocate (int width, int height, int colorDepth) {
+    //allocate memory for a t_bmp24 element
     t_bmp24 *image = (t_bmp24*)malloc(sizeof(t_bmp24));
     if (image == NULL) {
         printf("Memory allocation failed");
         return NULL;
     }
 
+    //giving the elements the parameters given
     image->colorDepth = colorDepth;
     image->data = bmp24_allocateDataPixels(width , height);
     image->height = height;
     image->width = width;
 
+    //if failed, free the data used
     if (image->data == NULL) {
         printf("Couldn't alocate data");
         free(image);
@@ -49,18 +56,23 @@ t_bmp24 * bmp24_allocate (int width, int height, int colorDepth) {
 }
 
 void bmp24_free (t_bmp24 * img) {
+    //free the datas of the t_bmp24 image given
     bmp24_freeDataPixels(img->data, img->height);
     free(img);
 }
 
 
 void file_rawRead (uint32_t position, void * buffer, uint32_t size, size_t n, FILE * file) {
+    // Set the pointer to the specified position given
     fseek(file, position, SEEK_SET);
+    //read n items from the file to stock them in the buffer
     fread(buffer, size, n, file);
 }
 
 void file_rawWrite (uint32_t position, void * buffer, uint32_t size, size_t n, FILE * file) {
+    // Set the pointer to the specified position given
     fseek(file, position, SEEK_SET);
+    //write n items from the buffer to the file
     fwrite(buffer, size, n, file);
 }
 
