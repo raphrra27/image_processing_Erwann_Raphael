@@ -63,14 +63,14 @@ void bmp24_free (t_bmp24 * img) {
 
 
 void file_rawRead (uint32_t position, void * buffer, uint32_t size, size_t n, FILE * file) {
-    // Set the pointer to the specified position given
+    //set the pointer to the specified position given
     fseek(file, position, SEEK_SET);
     //read n items from the file to stock them in the buffer
     fread(buffer, size, n, file);
 }
 
 void file_rawWrite (uint32_t position, void * buffer, uint32_t size, size_t n, FILE * file) {
-    // Set the pointer to the specified position given
+    //set the pointer to the specified position given
     fseek(file, position, SEEK_SET);
     //write n items from the buffer to the file
     fwrite(buffer, size, n, file);
@@ -116,7 +116,7 @@ void bmp24_writePixelData(t_bmp24 *image, FILE *file) {
     }
 }
 
-//Function taht is used to load the image
+//function taht is used to load the image
 t_bmp24 *bmp24_loadImage(const char *filename) {
 
     FILE *file = fopen(filename, "rb");
@@ -161,7 +161,7 @@ t_bmp24 *bmp24_loadImage(const char *filename) {
 }
 
 
-//Function to save the image 
+//function to save the image 
 void bmp24_saveImage (t_bmp24 * img, const char * filename){
     FILE *file = fopen(filename, "wb");
 
@@ -181,7 +181,7 @@ void bmp24_saveImage (t_bmp24 * img, const char * filename){
 }
 
 
-//Function to apply a negative filter (simple loop and just remplace)
+//function to apply a negative filter (simple loop and just remplace)
 void bmp24_negative(t_bmp24 *img) {
     for (int y = 0; y < img->height; ++y) {
         for (int x = 0; x < img->width; ++x) {
@@ -209,7 +209,7 @@ void bmp24_grayscale(t_bmp24 *img) {
 }
 
 
-//Function that apply the brightness filter
+//function that apply the brightness filter
 void bmp24_brightness(t_bmp24 *img, int value) {
     int y, x;
     for (y = 0; y < img->height; y++) {
