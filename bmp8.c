@@ -178,3 +178,54 @@ void bmp8_applyFilter(t_bmp8 * img, float ** kernel, int kernelSize) {
         }
     }
 }
+
+
+
+
+
+
+
+
+//part 3 functions
+
+unsigned int * bmp8_computeHistogram(t_bmp8 * img) {
+    unsigned int *histogram = (unsigned int *) malloc(256 * sizeof(unsigned int));
+    if (!histogram) {
+        printf("Error during malloc");
+        return NULL;
+    }
+    int grayscale;
+    for (int i = 0; i < img->height; i++) {
+        for (int j = 0; j < img->width; j++) {
+            int index = i * img->width + j;
+            grayscale = img->data[index];
+            histogram[grayscale]++;
+        }
+    }
+    return histogram;
+}
+
+
+unsigned int * bmp8_computeCDF(unsigned int * hist){
+    unsigned int *CDF = (unsigned int *) malloc(256 * sizeof(unsigned int));
+    if (!CDF) {
+        printf("Error during malloc");
+        return NULL;
+    }
+
+    CDF[0] = hist[0];
+    for (int j = 1; j < 256; j++) {
+        CDF[j] = CDF[j-1] + hist[j];
+    }
+    return CDF;
+}
+
+
+
+void bmp8_equalize(t_bmp8 * img, unsigned int * hist_eq) {
+    unsigned int histogram =  bmp8_computeHistogram(img);
+    unsigned int histogram_eq = bmp8_computeCDF(img);
+    for (int i = 0; img->dataSize-1; i++) {
+        img->data[i] = hist_eq[img->data[i]];
+    }
+}

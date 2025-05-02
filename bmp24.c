@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+
 t_pixel ** bmp24_allocateDataPixels (int width, int height) {
     //allocating memory for the array of array of pixels
     t_pixel **pixels = (t_pixel **)malloc(sizeof(t_pixel *) * height);
