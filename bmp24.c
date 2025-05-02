@@ -116,49 +116,48 @@ void bmp24_writePixelData(t_bmp24 *image, FILE *file) {
     }
 }
 
-//function taht is used to load the image
+//function to load the image
 t_bmp24 *bmp24_loadImage(const char *filename) {
-
     FILE *file = fopen(filename, "rb");
-    t_bmp24 *image = malloc(sizeof(t_bmp24));
+    if (file == NULL) {
+        printf("error while opening the file, the file does not exist!\n");
+        return NULL;
+    }
 
     //temporary
     t_bmp_header header;
     t_bmp_info header_info;
 
-    //check if the file exits
-    if (file == NULL) {
-        printf("Error while opening the file, the file does not exist!\n");
-        return NULL;
-    }
+    //read the headers from the file first
+    file_rawRead(0, &header, sizeof(t_bmp_header), 1, file);
+    file_rawRead(sizeof(t_bmp_header), &header_info, sizeof(t_bmp_info), 1, file);
 
-    //read the widht, height and colordept od the image
     int width = header_info.width;
     int height = header_info.height;
     int colorDepth = header_info.bits;
 
-    //add a test to verify that this in of course a 24 color dept
-    if (image->colorDepth != 24) {
-        printf("The image is not 24 bits deep");
+    //verify that this is a 24-bit color image
+    if (colorDepth != 24) {
+        printf("the image is not 24 bits deep\n");
+        fclose(file);
+        return NULL;
     }
 
-    //allocate memory using previous functions
-    t_bmp24 *image =  bmp24_allocate(width, height,colorDepth);
+    //allocate memory for the image
+    t_bmp24 *image = bmp24_allocate(width, height, colorDepth);
 
-    //read teh header and header info
-    file_rawRead(0, &header, sizeof(t_bmp_header), 1, file); 
-    file_rawRead(sizeof(t_bmp_header), &header_info, sizeof(t_bmp_info), 1, file);
-    //add them in the image header and header_info
+    //assign header fields
     image->header = header;
     image->header_info = header_info;
 
     //read the pixel data
     bmp24_readPixelData(image, file);
 
-    //close and return the loaded image
+    printf("Image loaded successfully!\n\n");
     fclose(file);
     return image;
 }
+
 
 
 //function to save the image 

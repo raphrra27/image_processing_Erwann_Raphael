@@ -16,7 +16,7 @@
 #define DEFAULT_DEPTH 0x18 // 24
 
 
-
+#pragma pack(push, 1)
 typedef struct {
     uint16_t type;
     uint32_t size;
@@ -38,7 +38,7 @@ typedef struct {
     uint32_t ncolors;
     uint32_t importantcolors;
 } t_bmp_info;
-
+#pragma pack(pop)
 
 typedef struct {
 uint8_t red;
@@ -69,4 +69,7 @@ void bmp24_writePixelValue (t_bmp24 * image, int x, int y, FILE * file);
 void bmp24_writePixelData (t_bmp24 * image, FILE * file);
 t_bmp24 * bmp24_loadImage (const char * filename);
 void bmp24_saveImage (t_bmp24 * img, const char * filename);
-
+void bmp24_negative (t_bmp24 * img);
+void bmp24_grayscale (t_bmp24 * img);
+void bmp24_brightness (t_bmp24 * img, int value);
+t_pixel bmp24_convolution (t_bmp24 * img, int x, int y, float ** kernel, int kernelSize);
