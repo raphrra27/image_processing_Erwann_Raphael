@@ -208,7 +208,7 @@ int main() {
                         printf("Enter brightness adjustment value: ");
                         scanf("%d", &bright);
 
-                        bmp24_brightness(image, bright);
+                        bmp24_brightness(imagec, bright);
                         printf("Brightness filter applied.\n");
                         break;
 
@@ -216,7 +216,7 @@ int main() {
                         printf("Enter grayscale: ");
                         scanf("%d", &thresh);
 
-                        bmp24_grayscale(image);
+                        bmp24_grayscale(imagec);
                         printf("Threshold filter applied.\n");
                         break;
 
