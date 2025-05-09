@@ -25,5 +25,18 @@ typedef struct {
     void bmp8_threshold(t_bmp8 *img, int threshold);
     //apply a filter using matrices
     void bmp8_applyFilter(t_bmp8 * img, float ** kernel, int kernelSize);
+    //to create our kernels
+    float** createKernel(float values[3][3]);
+    //free ou kernel 
+    void freeKernel(float **kernel);
+    //box blur function
+    void bmp8_boxblur(t_bmp8 * img);
+    //gaussian filter
+    void bmp8_gaussian(t_bmp8 * img);
+    //emboss function filter
+    void bmp8_emboss(t_bmp8 * img);
+    //outline function filter
+    void bmp8_outline(t_bmp8 * img);
+
 
     

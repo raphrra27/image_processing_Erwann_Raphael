@@ -161,19 +161,21 @@ t_bmp24 *bmp24_loadImage(const char *filename) {
 
 
 //function to save the image 
-void bmp24_saveImage (t_bmp24 * img, const char * filename){
+void bmp24_saveImage(t_bmp24 *img, const char *filename) {
     FILE *file = fopen(filename, "wb");
 
-    //test to verify that the fil is correct
-    if (file == NULL){
-        printf("error while opening the file (doesn't exits)");
+    //check for file opening errors
+    if (file == NULL) {
+        printf("Error while opening the file (doesn't exist).\n");
         return;
     }
 
-
-    //write header and the iage data
+    //write header and the image data
     file_rawWrite(0, &(img->header), sizeof(t_bmp_header), 1, file);
     file_rawWrite(sizeof(t_bmp_header), &(img->header_info), sizeof(t_bmp_info), 1, file);
+
+    //write the pixel data
+    bmp24_writePixelData(img, file);
 
     //close the file
     fclose(file);
@@ -302,3 +304,116 @@ t_pixel bmp24_convolution(t_bmp24 *img, int x, int y, float **kernel, int kernel
     //return the result (obvioulsy)
     return result;
 }
+
+//to create the kernel dinamicly
+float** createKernell(float values[3][3]) {
+    float **kernel = malloc(3 * sizeof(float *));
+    for (int i = 0; i < 3; i++) {
+        kernel[i] = malloc(3 * sizeof(float));
+        for (int j = 0; j < 3; j++) {
+            kernel[i][j] = values[i][j];
+        }
+    }
+    return kernel;
+}
+
+void freeKernell(float **kernel) {
+    for (int i = 0; i < 3; i++) {
+        free(kernel[i]);
+    }
+    free(kernel);
+}
+
+//value of the kernels
+float boxBlurKernel[3][3] = {
+    {1.0/9, 1.0/9, 1.0/9},
+    {1.0/9, 1.0/9, 1.0/9},
+    {1.0/9, 1.0/9, 1.0/9}
+};
+float gaussianBlurKernel[3][3] = {
+    {1.0/16, 2.0/16, 1.0/16},
+    {2.0/16, 4.0/16, 2.0/16},
+    {1.0/16, 2.0/16, 1.0/16}
+};    
+float valueOutline[3][3] = {
+    {-1, -1, -1},
+    {-1,  8, -1},
+    {-1, -1, -1}
+};
+float valueEmboss[3][3] = {
+    {-2, -1, 0},
+    {-1,  1, 1},
+    {0,  1, 2}
+};
+
+//to easy filter applyed
+//function boxblur
+void bmp24_boxBlur(t_bmp24 *img) {
+    
+    float **kernel = createKernell(boxBlurKernel);
+    t_pixel **resultData = bmp24_allocateDataPixels(img->width, img->height);
+
+    for (int y = 0; y < img->height; y++) {
+        for (int x = 0; x < img->width; x++) {
+            resultData[y][x] = bmp24_convolution(img, x, y, kernel, 3);
+        }
+    }
+
+    bmp24_freeDataPixels(img->data, img->height);
+    img->data = resultData;
+
+    freeKernell(kernel);
+}
+
+//function Gaussian blur
+void bmp24_gaussianBlur(t_bmp24 *img) {
+    
+    float **kernel = createKernell(gaussianBlurKernel);
+    t_pixel **resultData = bmp24_allocateDataPixels(img->width, img->height);
+
+    for (int y = 0; y < img->height; y++) {
+        for (int x = 0; x < img->width; x++) {
+            resultData[y][x] = bmp24_convolution(img, x, y, kernel, 3);
+        }
+    }
+
+
+    bmp24_freeDataPixels(img->data, img->height);
+    img->data = resultData;
+
+    freeKernell(kernel);
+}
+
+//function outline
+void bmp24_outline(t_bmp24 *img) {
+
+    float **outlineKernel = createKernell(valueOutline);
+    t_pixel **resultData = bmp24_allocateDataPixels(img->width, img->height);
+
+    for (int y = 0; y < img->height; y++) {
+        for (int x = 0; x < img->width; x++) {
+            resultData[y][x] = bmp24_convolution(img, x, y, outlineKernel, 3);
+        }
+    }
+
+    bmp24_freeDataPixels(img->data, img->height);
+    img->data = resultData;
+
+    freeKernell(outlineKernel);
+}
+void bmp24_emboss(t_bmp24 *img) {
+    float **embossKernel = createKernell(valueEmboss);
+    t_pixel **resultData = bmp24_allocateDataPixels(img->width, img->height);
+
+    for (int y = 0; y < img->height; y++) {
+        for (int x = 0; x < img->width; x++) {
+            resultData[y][x] = bmp24_convolution(img, x, y, embossKernel, 3);
+        }
+    }
+
+    bmp24_freeDataPixels(img->data, img->height);
+    img->data = resultData;
+
+    freeKernell(embossKernel);
+}
+

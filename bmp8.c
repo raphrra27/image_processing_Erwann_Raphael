@@ -111,7 +111,7 @@ void bmp8_printInfo(t_bmp8 * img){
 void bmp8_negative(t_bmp8 * img){
     for (int i = 0; i < img->height; i++){
         for (int j = 0; j < img->width; j++){
-            img->data[i+j*img->width] = 255- img->data[i+j*img->width];
+            img->data[i * img->width + j] = 255- img->data[i * img->width + j];
         }
     }
 }
@@ -177,4 +177,73 @@ void bmp8_applyFilter(t_bmp8 * img, float ** kernel, int kernelSize) {
             img->data[currentIndex] = newvalue;
         }
     }
+}
+
+//Define all the kernel (with the values) needed for the filter (more clean for the main)
+float valuesBoxBlur[3][3] = {
+    {1/9.0f, 1/9.0f, 1/9.0f},
+    {1/9.0f, 1/9.0f, 1/9.0f},
+    {1/9.0f, 1/9.0f, 1/9.0f}
+};
+
+float valuesGaussianBlur[3][3] = {
+    {1/16.0f, 2/16.0f, 1/16.0f},
+    {2/16.0f, 4/16.0f, 2/16.0f},
+    {1/16.0f, 2/16.0f, 1/16.0f}
+};
+
+float valuesOutline[3][3] = {
+    {-1, -1, -1},
+    {-1,  8, -1},
+    {-1, -1, -1}
+};
+
+float valuesEmboss[3][3] = {
+    {-2, -1, 0},
+    {-1,  1, 1},
+    {0,  1, 2}
+};
+
+//we need to fin our pointer to pointer (one for free and one for dinamicly allocate memory)
+float** createKernel(float values[3][3]) {
+    float **kernel = malloc(3 * sizeof(float *));
+    for (int i = 0; i < 3; i++) {
+        kernel[i] = malloc(3 * sizeof(float));
+        for (int j = 0; j < 3; j++) {
+            kernel[i][j] = values[i][j];
+        }
+    }
+    return kernel;
+}
+
+void freeKernel(float **kernel) {
+    for (int i = 0; i < 3; i++) {
+        free(kernel[i]);
+    }
+    free(kernel);
+}
+
+//function to apply the kernel (create and then apply it)
+void bmp8_boxblur(t_bmp8 * img){
+    float **boxBlurKernel = createKernel(valuesBoxBlur);
+    bmp8_applyFilter(img, boxBlurKernel, 3);
+    freeKernel(boxBlurKernel);
+}
+
+void bmp8_gaussian(t_bmp8 * img){
+    float **gaussianBlurKernel = createKernel(valuesGaussianBlur);
+    bmp8_applyFilter(img, gaussianBlurKernel, 3);
+    freeKernel(gaussianBlurKernel);
+}
+
+void bmp8_outline(t_bmp8 * img){
+    float **outlineKernel = createKernel(valuesOutline);
+    bmp8_applyFilter(img, outlineKernel, 3);
+    freeKernel(outlineKernel);
+}
+
+void bmp8_emboss(t_bmp8 * img){
+    float **embossKernel = createKernel(valuesEmboss);
+    bmp8_applyFilter(img, embossKernel, 3);
+    freeKernel(embossKernel);
 }
