@@ -195,7 +195,7 @@ int main() {
                     printf("No image loaded, can't save the image.\n");
                 } else {
                     printf("Enter save file path: ");
-                    scanf(" %255s\n", saveFilename);
+                    scanf(" %255s", saveFilename);
 
                     bmp24_saveImage(imagec, saveFilename);
                     printf("Image saved successfully.\n");
