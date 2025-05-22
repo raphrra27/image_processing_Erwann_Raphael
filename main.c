@@ -8,7 +8,7 @@
 
 //little main to check if it works
 int main() {
-    int choice, filterChoice, run = 1, bright, thresh;
+    int choice, filterChoice, run = 1, bright, thresh, flip;
     char filename[256], saveFilename[256], colored;
     t_bmp8 *image = NULL;
     t_bmp24 *imagec = NULL;
@@ -168,7 +168,8 @@ int main() {
             printf("    1. Open an image\n");
             printf("    2. Save an image\n");
             printf("    3. Apply a filter\n");
-            printf("    4. Quit\n");
+            printf("    4. Rotate\n");
+            printf("    5. Quit\n");
             printf("\n>>>>> Your choice: ");
             scanf(" %d", &choice);
 
@@ -275,6 +276,27 @@ int main() {
             break;
 
             case 4:
+                printf("Choose an option:\n");
+                printf("    1. Rotate of 90 degree\n");
+                printf("    2. Flip it horizontaly\n");
+                printf("\n>>>>> Your choice: ");
+                scanf("%d", &flip);
+
+                switch (flip)
+                {
+                case 1: {
+                    t_bmp24 *rotate = bmp24_rotate90c(imagec);
+                    bmp24_free(imagec);
+                    imagec = rotate;
+                    break;
+                }
+                
+                default:
+                    break;
+                }
+            break;
+
+            case 5:
                 run = 0;
                 if (imagec) {
                     bmp24_free(imagec);

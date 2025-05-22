@@ -142,7 +142,7 @@ t_bmp24 *bmp24_loadImage(const char *filename) {
     int colorDepth = header_info.bits;
 
     //verify that this is a 24-bit color image
-    if (colorDepth != 24) {
+    if (colorDepth != DEFAULT_DEPTH) {
         printf("The image is not 24 bits deep\n");
         fclose(file);
         return NULL;
@@ -424,3 +424,31 @@ void bmp24_emboss(t_bmp24 *img) {
     freeKernell(embossKernel);
 }
 
+
+t_bmp24 *bmp24_rotate90c(t_bmp24 *imagec) {
+    t_bmp24 *rotated = malloc(sizeof(t_bmp24));
+    if (rotated == NULL) {
+        printf("Memory allocation for rotated image failed!\n");
+        return NULL;
+    }
+
+    rotated->width = imagec->height;
+    rotated->height = imagec->width;
+
+    rotated->data = bmp24_allocateDataPixels(rotated->width, rotated->height);
+    if (rotated->data == NULL) {
+        printf("Memory allocation for rotated pixels failed!\n");
+        free(rotated);
+        return NULL;
+    }
+
+    for (int y = 0; y < imagec->height; ++y) {
+        for (int x = 0; x < imagec->width; ++x) {
+            rotated->data[x][imagec->height - 1 - y] = imagec->data[y][x];
+        }
+    }
+
+    return rotated;
+}
+
+void bmp24_flipHorizontal(t_bmp24 *image);
