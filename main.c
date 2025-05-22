@@ -296,12 +296,17 @@ int main() {
 
                 switch (flip)
                 {
-                case 1: {
-                    t_bmp24 *rotate = bmp24_rotate90c(imagec);
-                    bmp24_free(imagec);
-                    imagec = rotate;
-                    break;
-                }
+                    case 1: {
+                        t_bmp24 *rotatedImage = (t_bmp24*)malloc(sizeof(t_bmp24));
+                        rotatedImage = bmp24_rotate90c(imagec);
+                        bmp24_free(imagec);  
+                        imagec = rotatedImage; 
+                        printf("working");
+                        int num = bmp24_validateHeader(imagec);
+                        printf("%d",num);
+                        break;
+                    }
+
                 
                 default:
                     break;
