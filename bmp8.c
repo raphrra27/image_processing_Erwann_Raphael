@@ -251,3 +251,58 @@ void bmp8_emboss(t_bmp8 * img){
     bmp8_applyFilter(img, embossKernel, 3);
     freeKernel(embossKernel);
 }
+
+
+
+unsigned int * bmp8_computeHistogram(t_bmp8 * img) {
+    unsigned int *histogram = (unsigned int*)calloc(256, sizeof(unsigned int));
+    if (!histogram) return NULL;
+
+    for (int y = 0; y < img->height; y++) {
+        for (int x = 0; x < img->width; x++) {
+            int currentindex = y * img->width + x;
+            unsigned char pixelValue = img->data[currentindex];
+            histogram[pixelValue]++;
+        }
+    }
+
+    return histogram;
+}
+
+
+
+unsigned int * bmp8_computeCDF(unsigned int * hist) {
+    unsigned int *cdf = (unsigned int*)calloc(256, sizeof(unsigned int));
+    if (!cdf) return NULL;
+
+    cdf[0] = hist[0];
+    for (int i = 1; i < 256; i++) {
+        cdf[i] = cdf[i-1] + hist[i];
+    }
+    return cdf;
+}
+
+
+
+
+void bmp8_equalize(t_bmp8 *img, unsigned int *cdf) {
+    unsigned int cdf_min = 0, totalPixels = img->width * img->height;
+    for (int i = 0; i < 256; i++) {
+        if (cdf[i] != 0) {
+            cdf_min = cdf[i];
+            break;
+        }
+    }
+
+
+    unsigned char hist_eq[256];
+    for (int i = 0; i < 256; i++) {
+        hist_eq[i] = (unsigned char)(
+            ((float)(cdf[i] - cdf_min) / (totalPixels - cdf_min)) * 255.0f + 0.5f
+        );
+    }
+
+    for (int i = 0; i < totalPixels; i++) {
+        img->data[i] = hist_eq[(unsigned char)img->data[i]];
+    }
+}

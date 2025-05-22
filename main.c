@@ -1,6 +1,7 @@
 #include "bmp8.h"
 #include "bmp24.h"
 #include <stdio.h>
+#include <stdlib.h>
 
 //to launch gcc main.c bmp_8.c -o image_processing
 //then ./image_processing
@@ -83,7 +84,8 @@ int main() {
                         printf("    5. Gaussian blur\n");
                         printf("    6. Outline\n");
                         printf("    7. Emboss\n");
-                        printf("    8. Return to previous menu\n");
+                        printf("    8. Equalize\n");
+                        printf("    9. Return to previous menu\n");
                         printf(">>>>> Your choice: ");
                         scanf(" %d", &filterChoice);
                 
@@ -124,8 +126,18 @@ int main() {
                                 bmp8_gaussian(image);
                                 printf("Gaussian filter applied.\n");
                                 break;
+                            
+                            case 8:
+                                unsigned int *histogram = bmp8_computeHistogram(image);
+                                unsigned int *hist_eq = bmp8_computeCDF(histogram);
+                                bmp8_equalize(image, hist_eq);
+                                free(histogram);
+                                free(hist_eq);
+                                printf("Equalization filter applied.\n");
+                                break;
+
                 
-                            case 8: 
+                            case 9: 
                                 printf("Returning to main menu.\n");
                                 break;
                 
