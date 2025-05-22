@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
+//function that allocate the datapixelfree
 t_pixel ** bmp24_allocateDataPixels (int width, int height) {
     //allocating memory for the array of array of pixels
     t_pixel **pixels = (t_pixel **)malloc(sizeof(t_pixel *) * height);
@@ -24,6 +25,7 @@ t_pixel ** bmp24_allocateDataPixels (int width, int height) {
     return pixels;
 }
 
+//function that free pixeldata
 void bmp24_freeDataPixels (t_pixel ** pixels, int height) {
     //loop that goes through all the rows and frees them
     for (int i = 0; i < height; i++) {
@@ -32,6 +34,7 @@ void bmp24_freeDataPixels (t_pixel ** pixels, int height) {
     free(pixels);
 }
 
+//function that allocate memory
 t_bmp24 * bmp24_allocate (int width, int height, int colorDepth) {
     //allocate memory for a t_bmp24 element
     t_bmp24 *image = (t_bmp24*)malloc(sizeof(t_bmp24));
@@ -55,13 +58,14 @@ t_bmp24 * bmp24_allocate (int width, int height, int colorDepth) {
     return image;
 }
 
+//function free
 void bmp24_free (t_bmp24 * img) {
     //free the datas of the t_bmp24 image given
     bmp24_freeDataPixels(img->data, img->height);
     free(img);
 }
 
-
+//function read
 void file_rawRead (uint32_t position, void * buffer, uint32_t size, size_t n, FILE * file) {
     //set the pointer to the specified position given
     fseek(file, position, SEEK_SET);
@@ -69,6 +73,7 @@ void file_rawRead (uint32_t position, void * buffer, uint32_t size, size_t n, FI
     fread(buffer, size, n, file);
 }
 
+//function write
 void file_rawWrite (uint32_t position, void * buffer, uint32_t size, size_t n, FILE * file) {
     //set the pointer to the specified position given
     fseek(file, position, SEEK_SET);
@@ -120,7 +125,7 @@ void bmp24_writePixelData(t_bmp24 *image, FILE *file) {
 t_bmp24 *bmp24_loadImage(const char *filename) {
     FILE *file = fopen(filename, "rb");
     if (file == NULL) {
-        printf("error while opening the file, the file does not exist!\n");
+        printf("Error while opening the file, the file does not exist!\n");
         return NULL;
     }
 
@@ -138,7 +143,7 @@ t_bmp24 *bmp24_loadImage(const char *filename) {
 
     //verify that this is a 24-bit color image
     if (colorDepth != 24) {
-        printf("the image is not 24 bits deep\n");
+        printf("The image is not 24 bits deep\n");
         fclose(file);
         return NULL;
     }
@@ -401,6 +406,8 @@ void bmp24_outline(t_bmp24 *img) {
 
     freeKernell(outlineKernel);
 }
+
+//function emboss
 void bmp24_emboss(t_bmp24 *img) {
     float **embossKernel = createKernell(valueEmboss);
     t_pixel **resultData = bmp24_allocateDataPixels(img->width, img->height);

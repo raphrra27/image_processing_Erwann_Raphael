@@ -2,6 +2,7 @@
 #include <string.h>
 #include "bmp8.h"
 
+//function that load the image
 t_bmp8 *bmp8_loadImage(const char *filename) {
     FILE *image = fopen(filename, "rb");
 
@@ -56,6 +57,7 @@ t_bmp8 *bmp8_loadImage(const char *filename) {
     return bmpImage;
 }
 
+//function save image
 void bmp8_saveImage(const char * filename, t_bmp8 * img) {
     //open the file for writing in binary mode
     FILE *file = fopen(filename, "wb");
@@ -149,7 +151,7 @@ void bmp8_threshold(t_bmp8 *img, int threshold) {
 }
 
 
-
+//function that apply filter for the 8
 void bmp8_applyFilter(t_bmp8 * img, float ** kernel, int kernelSize) {
     //going through the whole image
     for (int y = 1; y < img->height-1; y++) {
@@ -216,6 +218,7 @@ float** createKernel(float values[3][3]) {
     return kernel;
 }
 
+//free kernel for 
 void freeKernel(float **kernel) {
     for (int i = 0; i < 3; i++) {
         free(kernel[i]);
