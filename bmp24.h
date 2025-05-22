@@ -15,7 +15,7 @@
 // Constant for the color depth
 #define DEFAULT_DEPTH 0x18 // 24
 
-
+//define struct for bmp24
 #pragma pack(push, 1)
 typedef struct {
     uint16_t type;
@@ -38,15 +38,12 @@ typedef struct {
     uint32_t ncolors;
     uint32_t importantcolors;
 } t_bmp_info;
-#pragma pack(pop)
 
 typedef struct {
 uint8_t red;
 uint8_t green;
 uint8_t blue;
 } t_pixel;
-
-
 
 typedef struct {
     t_bmp_header header;
@@ -56,9 +53,10 @@ typedef struct {
     int colorDepth;
     t_pixel **data;
 } t_bmp24;
+#pragma pack(pop)
 
 
-
+//functions used in the bmp24.c
 t_pixel ** bmp24_allocateDataPixels (int width, int height);
 void bmp24_freeDataPixels (t_pixel ** pixels, int height);
 t_bmp24 * bmp24_allocate (int width, int height, int colorDepth);

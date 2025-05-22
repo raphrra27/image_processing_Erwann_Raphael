@@ -218,13 +218,14 @@ float** createKernel(float values[3][3]) {
     return kernel;
 }
 
-//free kernel for 
+//free kernel for the apply filter
 void freeKernel(float **kernel) {
     for (int i = 0; i < 3; i++) {
         free(kernel[i]);
     }
     free(kernel);
 }
+
 
 //function to apply the kernel (create and then apply it)
 void bmp8_boxblur(t_bmp8 * img){
