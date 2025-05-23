@@ -126,7 +126,17 @@ int main() {
                                 bmp8_gaussian(image);
                                 printf("Gaussian filter applied.\n");
                                 break;
-                    
+
+                            case 6:
+                                bmp8_outline(image);
+                                printf("Outline filter applied.\n");
+                                break;
+
+                            case 7:
+                                bmp8_emboss(image);
+                                printf("Emboss filter applied.\n");
+                                break;
+                            
                             case 8:
                                 unsigned int *histogram = bmp8_computeHistogram(image);
                                 unsigned int *hist_eq = bmp8_computeCDF(histogram);
