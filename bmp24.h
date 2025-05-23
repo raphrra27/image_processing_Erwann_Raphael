@@ -78,8 +78,4 @@ void bmp24_gaussianBlur(t_bmp24 *img);
 void bmp24_outline(t_bmp24 *img);
 void bmp24_emboss(t_bmp24 *img);
 
-//function funs
-t_bmp24 *bmp24_rotate90c(t_bmp24 *image);
-void bmp24_flipHorizontalc(t_bmp24 *image);
-int bmp24_validateHeader(t_bmp24 *image);
 
