@@ -296,17 +296,20 @@ int main() {
 
                 switch (flip)
                 {
-                    case 1: {
-                        t_bmp24 *rotatedImage = (t_bmp24*)malloc(sizeof(t_bmp24));
-                        rotatedImage = bmp24_rotate90c(imagec);
+                case 1: {
+                    t_bmp24 *rotatedImage = bmp24_rotate90c(imagec);
+                    if (rotatedImage) {
                         bmp24_free(imagec);  
                         imagec = rotatedImage; 
-                        printf("working");
+                        printf("Rotation successful.\n");
+                        
                         int num = bmp24_validateHeader(imagec);
-                        printf("%d",num);
-                        break;
+                        printf("Header validation result: %d\n", num);
+                    } else {
+                        printf("Rotation failed.\n");
                     }
-
+                    break;
+                }
                 
                 default:
                     break;

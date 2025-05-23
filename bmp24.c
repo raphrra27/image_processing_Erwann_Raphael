@@ -443,14 +443,14 @@ t_bmp24 *bmp24_rotate90c(t_bmp24 *imagec) {
     // Update the header information for the rotated image
     rotated->header_info.width = imagec->height; // New width
     rotated->header_info.height = imagec->width; // New height
-    
+
     // Update BMP file header size according to new dimensions
     rotated->header.size = sizeof(t_bmp_header) + sizeof(t_bmp_info) + 
-                           (rotated->width * rotated->height * (rotated->colorDepth / 8));
+                           (rotated->header_info.width * rotated->header_info.height * 
+                            (rotated->colorDepth / 8));
     rotated->header.offset = sizeof(t_bmp_header) + sizeof(t_bmp_info);
 
-    printf("working");
-    return rotated;
+    return rotated; // Return the newly rotated image
 }
 
 int bmp24_validateHeader(t_bmp24 *image) {
