@@ -2,17 +2,22 @@
 #include <stdlib.h>
 #include <string.h>
 
-//function that allocate the datapixelfree
+
+//function that takes as parameter the width and height of the image. 
+//It allocates memory for a 2D array of pixels (t_pixel) and returns a pointer to it.
 t_pixel ** bmp24_allocateDataPixels (int width, int height) {
     //allocating memory for the array of array of pixels
     t_pixel **pixels = (t_pixel **)malloc(sizeof(t_pixel *) * height);
+    //check if the allocation was successful
     if (pixels == NULL) {
         printf("Not enough memory to allocate");
         return NULL;
     }
+    //loop that goes through the rows
     for (int i = 0; i < height; i++) {
         //goes through the rows to allocate memory of the sub arrays
         pixels[i] = (t_pixel*)malloc(width * sizeof(t_pixel));
+        //check if the allocation was successful
         if (pixels[i]==NULL) {
             printf("No enough memory to allocate");
             for (int j = 0; j < i; j++) {
@@ -25,7 +30,9 @@ t_pixel ** bmp24_allocateDataPixels (int width, int height) {
     return pixels;
 }
 
-//function that free pixeldata
+
+//function that takes as parameter a pointer to a 2D array of pixels and the height of the image.
+//It frees the memory allocated for the array of pixels.
 void bmp24_freeDataPixels (t_pixel ** pixels, int height) {
     //loop that goes through all the rows and frees them
     for (int i = 0; i < height; i++) {
@@ -34,7 +41,9 @@ void bmp24_freeDataPixels (t_pixel ** pixels, int height) {
     free(pixels);
 }
 
-//function that allocate memory
+
+//function that takes as parameters the width, height, and color depth of the image.
+//It allocates memory for a t_bmp24 element returning a pointer to it.
 t_bmp24 * bmp24_allocate (int width, int height, int colorDepth) {
     //allocate memory for a t_bmp24 element
     t_bmp24 *image = (t_bmp24*)malloc(sizeof(t_bmp24));
@@ -58,14 +67,18 @@ t_bmp24 * bmp24_allocate (int width, int height, int colorDepth) {
     return image;
 }
 
-//function free
+
+//function that takes as parameter a pointer to a t_bmp24 element.
+//It frees the memory allocated for the t_bmp24 element and its data pixels.
 void bmp24_free (t_bmp24 * img) {
     //free the datas of the t_bmp24 image given
     bmp24_freeDataPixels(img->data, img->height);
     free(img);
 }
 
-//function read
+
+//function that reads raw data from a file at a specified position.
+//It takes as parameters the position in the file, a pointer to a buffer where the data will be stored,
 void file_rawRead (uint32_t position, void * buffer, uint32_t size, size_t n, FILE * file) {
     //set the pointer to the specified position given
     fseek(file, position, SEEK_SET);
@@ -73,7 +86,9 @@ void file_rawRead (uint32_t position, void * buffer, uint32_t size, size_t n, FI
     fread(buffer, size, n, file);
 }
 
-//function write
+
+//function that writes raw data to a file at a specified position.
+//It takes as parameters the position in the file, a pointer to a buffer containing the data to be written,
 void file_rawWrite (uint32_t position, void * buffer, uint32_t size, size_t n, FILE * file) {
     //set the pointer to the specified position given
     fseek(file, position, SEEK_SET);
@@ -81,7 +96,9 @@ void file_rawWrite (uint32_t position, void * buffer, uint32_t size, size_t n, F
     fwrite(buffer, size, n, file);
 }
 
-//Function that read the pixel value (calulate, move the cursor and the read and store)
+
+//function that takes as parameters a pointer to a t_bmp24 element, the x and y coordinates of the pixel, and a file pointer.
+//It reads the pixel value at the specified coordinates from the file and stores it in the t_bmp24 element's data array.
 void bmp24_readPixelValue(t_bmp24 *image, int x, int y, FILE *file) {
     long offset = image->header.offset + ((image->height - 1 - y) * image->width + x) * 3;
     fseek(file, offset, SEEK_SET);
@@ -92,7 +109,8 @@ void bmp24_readPixelValue(t_bmp24 *image, int x, int y, FILE *file) {
     image->data[y][x].red = buffer[2];
 }
 
-//basic loop that goes line by line to read the pixel data
+//function that takes as parameters a pointer to a t_bmp24 element and a file pointer.
+//It reads the pixel data from the file and stores it in the t_bmp24 element's data array.
 void bmp24_readPixelData(t_bmp24 *image, FILE *file) {
     for (int y = 0; y < image->height; ++y) {
         for (int x = 0; x < image->width; ++x) {
@@ -101,7 +119,8 @@ void bmp24_readPixelData(t_bmp24 *image, FILE *file) {
     }
 }
 
-//functoin that write into the file the data (calculate, move, and write)
+//function that takes as parameters a pointer to a t_bmp24 element, the x and y coordinates of the pixel, and a file pointer.
+//It writes the pixel value at the specified coordinates to the file.
 void bmp24_writePixelValue(t_bmp24 *image, int x, int y, FILE *file) {
     long offset = image->header.offset + ((image->height - 1 - y) * image->width + x) * 3;
     fseek(file, offset, SEEK_SET);
@@ -112,7 +131,8 @@ void bmp24_writePixelValue(t_bmp24 *image, int x, int y, FILE *file) {
     fwrite(buf, 1, 3, file);
 }
 
-//basic loop that goes pixel by pixel to write the pixel value at position x,y
+//function that takes as parameters a pointer to a t_bmp24 element and a file pointer.
+//It writes the pixel data from the t_bmp24 element's data array to the file.
 void bmp24_writePixelData(t_bmp24 *image, FILE *file) {
     for (int y = 0; y < image->height; ++y) {
         for (int x = 0; x < image->width; ++x) {
@@ -121,7 +141,8 @@ void bmp24_writePixelData(t_bmp24 *image, FILE *file) {
     }
 }
 
-//function to load the image
+//function that takes as parameter a filename.
+//It opens the file, reads the BMP headers, verifies that the image is 24 bits deep, and returns a pointer to a t_bmp24 element containing the image data.
 t_bmp24 *bmp24_loadImage(const char *filename) {
     FILE *file = fopen(filename, "rb");
     if (file == NULL) {
@@ -137,6 +158,7 @@ t_bmp24 *bmp24_loadImage(const char *filename) {
     file_rawRead(0, &header, sizeof(t_bmp_header), 1, file);
     file_rawRead(sizeof(t_bmp_header), &header_info, sizeof(t_bmp_info), 1, file);
 
+    
     int width = header_info.width;
     int height = header_info.height;
     int colorDepth = header_info.bits;
@@ -165,7 +187,7 @@ t_bmp24 *bmp24_loadImage(const char *filename) {
 
 
 
-//function to save the image 
+//function that  
 void bmp24_saveImage(t_bmp24 *img, const char *filename) {
     FILE *file = fopen(filename, "wb");
 

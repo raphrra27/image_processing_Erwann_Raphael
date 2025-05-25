@@ -57,25 +57,46 @@ typedef struct {
 
 
 //functions used in the bmp24.c
+
+//function to read raw data from file
 t_pixel ** bmp24_allocateDataPixels (int width, int height);
+// function to free the data pixels
 void bmp24_freeDataPixels (t_pixel ** pixels, int height);
+// function to allocate memory for a t_bmp24 element
 t_bmp24 * bmp24_allocate (int width, int height, int colorDepth);
+// function to free the t_bmp24 element
 void bmp24_free (t_bmp24 * img);
+// function to read raw data from file
 void bmp24_readPixelValue (t_bmp24 * image, int x, int y, FILE * file);
+// function to write raw data to file
 void bmp24_readPixelData (t_bmp24 * image, FILE * file);
+// function to write raw data to file
 void bmp24_writePixelValue (t_bmp24 * image, int x, int y, FILE * file);
+// function to write pixel data to file
 void bmp24_writePixelData (t_bmp24 * image, FILE * file);
+// function to read raw data from file
 t_bmp24 * bmp24_loadImage (const char * filename);
+// function to save the image
 void bmp24_saveImage (t_bmp24 * img, const char * filename);
+// function to apply a negative filter
 void bmp24_negative (t_bmp24 * img);
+// function to apply the grayscale filter
 void bmp24_grayscale (t_bmp24 * img);
+// function to apply the brightness filter
 void bmp24_brightness (t_bmp24 * img, int value);
 t_pixel bmp24_convolution (t_bmp24 * img, int x, int y, float ** kernel, int kernelSize);
+// function to create a kernel from a 2D array
 float** createKernell(float values[3][3]);
+// function to free the kernel
 void freeKernell(float **kernel);
+// function to apply the box blur filter
 void bmp24_boxBlur(t_bmp24 *img);
+// function to apply the gaussian blur filter
 void bmp24_gaussianBlur(t_bmp24 *img);
+// function to apply the outline filter
 void bmp24_outline(t_bmp24 *img);
+// function to apply the emboss filter
 void bmp24_emboss(t_bmp24 *img);
+
 
 
