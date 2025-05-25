@@ -214,7 +214,8 @@ void bmp24_saveImage(t_bmp24 *img, const char *filename) {
 }
 
 
-//function to apply a negative filter (simple loop and just remplace)
+//function that takes as parameters a pointer to a t_bmp24 element.
+//It applies a negative filter to the image by inverting the color values of each pixel.
 void bmp24_negative(t_bmp24 *img) {
     for (int y = 0; y < img->height; ++y) {
         for (int x = 0; x < img->width; ++x) {
@@ -226,7 +227,8 @@ void bmp24_negative(t_bmp24 *img) {
 }
 
 
-//>Function to apply the grayscale filter (simple loop and just calculate the new pixels)
+//function hat takes as parameters a pointer to a t_bmp24 element.
+//It applies a grayscale filter to the image by converting each pixel to its grayscale equivalent.
 void bmp24_grayscale(t_bmp24 *img) {
     for (int y = 0; y < img->height; ++y) {
         for (int x = 0; x < img->width; ++x) {
@@ -242,7 +244,8 @@ void bmp24_grayscale(t_bmp24 *img) {
 }
 
 
-//function that apply the brightness filter
+//function that takes as parameters a pointer to a t_bmp24 element and an integer value.
+//It adjusts the brightness of the image by adding the value to each pixel's color components.
 void bmp24_brightness(t_bmp24 *img, int value) {
     int y, x;
     for (y = 0; y < img->height; y++) {
@@ -279,7 +282,8 @@ void bmp24_brightness(t_bmp24 *img, int value) {
 }
 
 
-//function to apply the convolution filter
+//function that takes as parameters a pointer to a t_bmp24 element, a kernel (2D array of floats), and the size of the kernel.
+//It applies a convolution filter to the image using the specified kernel. It returns a new pixel value for the specified coordinates (x, y) based on the convolution operation.
 t_pixel bmp24_convolution(t_bmp24 *img, int x, int y, float **kernel, int kernelSize) {
     //usefull variables
     int k, l, half = kernelSize/2;
@@ -337,7 +341,9 @@ t_pixel bmp24_convolution(t_bmp24 *img, int x, int y, float **kernel, int kernel
     return result;
 }
 
-//to create the kernel dinamicly
+//function that takes as parameters a 2D array of float values representing a kernel.
+//It allocates memory for a 2D array of floats and initializes it with the values from the input array.
+//It returns the created kernel.
 float** createKernell(float values[3][3]) {
     float **kernel = malloc(3 * sizeof(float *));
     for (int i = 0; i < 3; i++) {
@@ -349,6 +355,8 @@ float** createKernell(float values[3][3]) {
     return kernel;
 }
 
+//function that takes as parameters a pointer to a 2D array of floats representing a kernel.
+//It frees the memory allocated for the kernel and returns it.
 void freeKernell(float **kernel) {
     for (int i = 0; i < 3; i++) {
         free(kernel[i]);
@@ -356,7 +364,7 @@ void freeKernell(float **kernel) {
     free(kernel);
 }
 
-//value of the kernels
+//here are the kernels used for the filters
 float boxBlurKernel[3][3] = {
     {1.0/9, 1.0/9, 1.0/9},
     {1.0/9, 1.0/9, 1.0/9},
@@ -378,8 +386,9 @@ float valueEmboss[3][3] = {
     {0,  1, 2}
 };
 
-//to easy filter applyed
-//function boxblur
+
+//function that takes as parameters a pointer to a t_bmp24 element.
+//It applies a box blur filter to the image by convolving each pixel with the box blur kernel.
 void bmp24_boxBlur(t_bmp24 *img) {
     
     float **kernel = createKernell(boxBlurKernel);
@@ -397,7 +406,8 @@ void bmp24_boxBlur(t_bmp24 *img) {
     freeKernell(kernel);
 }
 
-//function Gaussian blur
+//function that takes as parameters a pointer to a t_bmp24 element.
+//It applies a Gaussian blur filter to the image by convolving each pixel with the Gaussian blur kernel.
 void bmp24_gaussianBlur(t_bmp24 *img) {
     
     float **kernel = createKernell(gaussianBlurKernel);
@@ -416,7 +426,8 @@ void bmp24_gaussianBlur(t_bmp24 *img) {
     freeKernell(kernel);
 }
 
-//function outline
+//function that takes as parameters a pointer to a t_bmp24 element.
+//It applies an outline filter to the image by convolving each pixel with the outline kernel.
 void bmp24_outline(t_bmp24 *img) {
 
     float **outlineKernel = createKernell(valueOutline);
@@ -434,7 +445,8 @@ void bmp24_outline(t_bmp24 *img) {
     freeKernell(outlineKernel);
 }
 
-//function emboss
+//function that takes as parameters a pointer to a t_bmp24 element.
+//It applies an emboss filter to the image by convolving each pixel with the emboss kernel.
 void bmp24_emboss(t_bmp24 *img) {
     float **embossKernel = createKernell(valueEmboss);
     t_pixel **resultData = bmp24_allocateDataPixels(img->width, img->height);
