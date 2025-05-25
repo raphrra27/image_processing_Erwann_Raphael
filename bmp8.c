@@ -1,8 +1,39 @@
+//INCLUDE + VARIABLES
+
 #include <stdlib.h>
 #include <string.h>
 #include "bmp8.h"
 
-//function that load the image
+//Define all the kernel (with the values) needed for the filter (more clean for the main)
+float valuesBoxBlur[3][3] = {
+    {1/9.0f, 1/9.0f, 1/9.0f},
+    {1/9.0f, 1/9.0f, 1/9.0f},
+    {1/9.0f, 1/9.0f, 1/9.0f}
+};
+
+float valuesGaussianBlur[3][3] = {
+    {1/16.0f, 2/16.0f, 1/16.0f},
+    {2/16.0f, 4/16.0f, 2/16.0f},
+    {1/16.0f, 2/16.0f, 1/16.0f}
+};
+
+float valuesOutline[3][3] = {
+    {-1, -1, -1},
+    {-1,  8, -1},
+    {-1, -1, -1}
+};
+
+float valuesEmboss[3][3] = {
+    {-2, -1, 0},
+    {-1,  1, 1},
+    {0,  1, 2}
+};
+
+
+
+//FUNCTIONS
+
+//function that load the image bmp8 so the image with no colors
 t_bmp8 *bmp8_loadImage(const char *filename) {
     FILE *image = fopen(filename, "rb");
 
@@ -57,7 +88,7 @@ t_bmp8 *bmp8_loadImage(const char *filename) {
     return bmpImage;
 }
 
-//function save image
+//function save image in bmp format (NEEDED)
 void bmp8_saveImage(const char * filename, t_bmp8 * img) {
     //open the file for writing in binary mode
     FILE *file = fopen(filename, "wb");
@@ -124,6 +155,7 @@ void bmp8_brightness(t_bmp8 * img, int value){
         for (int j = 0; j < img->width; j++) {
             int index = i * img->width + j;
 
+            //conditions if the value goes up to 255 or under 0
             if ((img->data[index] + value) > 255) {
                 img->data[index] = 255;
             } else if ((img->data[index] + value) < 0) {
@@ -141,6 +173,7 @@ void bmp8_threshold(t_bmp8 *img, int threshold) {
         for (int j = 0; j < img->width; j++) {
             int index = i * img->width + j;
 
+            //conditions if the value goes up to 255 or under 0
             if (img->data[index] >= threshold) {
                 img->data[index] = 255;
             } else {
@@ -151,7 +184,7 @@ void bmp8_threshold(t_bmp8 *img, int threshold) {
 }
 
 
-//function that apply filter for the 8
+//function that apply filter for the bmp8
 void bmp8_applyFilter(t_bmp8 * img, float ** kernel, int kernelSize) {
     //going through the whole image
     for (int y = 1; y < img->height-1; y++) {
@@ -169,7 +202,8 @@ void bmp8_applyFilter(t_bmp8 * img, float ** kernel, int kernelSize) {
                     newvalue += img->data[index] * kernel[i+ kernelSize/2][j+ kernelSize/2];
                 }
             }
-            //now that it's computed, we can apply the new value to the pixel
+
+            //now that its computed, we can apply the new value to the pixel
             int currentIndex = y * img->width + x;
             if (newvalue > 255) {
                 newvalue = 255;
@@ -181,32 +215,8 @@ void bmp8_applyFilter(t_bmp8 * img, float ** kernel, int kernelSize) {
     }
 }
 
-//Define all the kernel (with the values) needed for the filter (more clean for the main)
-float valuesBoxBlur[3][3] = {
-    {1/9.0f, 1/9.0f, 1/9.0f},
-    {1/9.0f, 1/9.0f, 1/9.0f},
-    {1/9.0f, 1/9.0f, 1/9.0f}
-};
 
-float valuesGaussianBlur[3][3] = {
-    {1/16.0f, 2/16.0f, 1/16.0f},
-    {2/16.0f, 4/16.0f, 2/16.0f},
-    {1/16.0f, 2/16.0f, 1/16.0f}
-};
-
-float valuesOutline[3][3] = {
-    {-1, -1, -1},
-    {-1,  8, -1},
-    {-1, -1, -1}
-};
-
-float valuesEmboss[3][3] = {
-    {-2, -1, 0},
-    {-1,  1, 1},
-    {0,  1, 2}
-};
-
-//we need to fin our pointer to pointer (one for free and one for dinamicly allocate memory)
+//we need to find our pointer to pointer (one for free and one for dinamicly allocate memory)
 float** createKernel(float values[3][3]) {
     float **kernel = malloc(3 * sizeof(float *));
     for (int i = 0; i < 3; i++) {
@@ -253,11 +263,16 @@ void bmp8_emboss(t_bmp8 * img){
 }
 
 
-
+//function to compute the histogram 
 unsigned int * bmp8_computeHistogram(t_bmp8 * img) {
     unsigned int *histogram = (unsigned int*)calloc(256, sizeof(unsigned int));
-    if (!histogram) return NULL;
 
+    //check if there is an historgram pointer
+    if (!histogram){
+        return NULL;
+    } 
+    
+    //going through the imgae
     for (int y = 0; y < img->height; y++) {
         for (int x = 0; x < img->width; x++) {
             int currentindex = y * img->width + x;
@@ -270,10 +285,14 @@ unsigned int * bmp8_computeHistogram(t_bmp8 * img) {
 }
 
 
-
+//functions used to compute CDF
 unsigned int * bmp8_computeCDF(unsigned int * hist) {
     unsigned int *cdf = (unsigned int*)calloc(256, sizeof(unsigned int));
-    if (!cdf) return NULL;
+
+    //check if there is cdf
+    if (!cdf){
+        return NULL;
+    } 
 
     cdf[0] = hist[0];
     for (int i = 1; i < 256; i++) {
@@ -284,16 +303,16 @@ unsigned int * bmp8_computeCDF(unsigned int * hist) {
 
 
 
-
+//functions to equalize the bmp8 file (filters)
 void bmp8_equalize(t_bmp8 *img, unsigned int *cdf) {
     unsigned int cdf_min = 0, totalPixels = img->width * img->height;
+
     for (int i = 0; i < 256; i++) {
         if (cdf[i] != 0) {
             cdf_min = cdf[i];
             break;
         }
     }
-
 
     unsigned char hist_eq[256];
     for (int i = 0; i < 256; i++) {

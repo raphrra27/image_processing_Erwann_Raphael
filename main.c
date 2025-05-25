@@ -1,3 +1,5 @@
+//INCLUDES NEEDED
+
 #include "bmp8.h"
 #include "bmp24.h"
 #include <stdio.h>
@@ -7,15 +9,16 @@
 //then ./image_processing
 
 
-//little main to check if it works
+//MAIN
 int main() {
+    //variables needed in the programm
     int choice, filterChoice, run = 1, bright, thresh, flip;
     char filename[256], saveFilename[256], colored;
     t_bmp8 *image = NULL;
     t_bmp24 *imagec = NULL;
 
 
-    //to verify if its a 8 or 24 deep
+    //to verify if its a 8 or 24 deep (colored or not)
     printf("Is it a colored image ? : (Y/N) ");
     scanf(" %c", &colored);
     while (colored != 'Y' && colored != 'N') {
@@ -28,7 +31,7 @@ int main() {
 
         switch (colored)
         {
-            //Case for a gray bmp
+            //Case for a gray bmp (bmp8)
             case 'N':
 
             printf("\nPlease choose an option:\n");
@@ -41,8 +44,9 @@ int main() {
             scanf(" %d", &choice);
 
 
-            //switch case for better logic
+            //switch case for better logic (this is the menu)
             switch (choice) {
+                //load image
                 case 1:
                     printf("Enter file path: ");
                     scanf("%255s", filename);
@@ -59,7 +63,8 @@ int main() {
                         continue;
                     }
                     break;
-
+                
+                //save image
                 case 2:
                     if (!image) {
                         printf("No image loaded, can't save the image.\n");
@@ -71,8 +76,9 @@ int main() {
                         printf("Image saved successfully.\n");
                     }
                     break;
-
-                    case 3:
+                
+                //apply a filter in the image
+                case 3:
                     if (!image) {
                         printf("No image loaded; can't apply a filter.\n");
                     } else {
@@ -88,13 +94,16 @@ int main() {
                         printf("    9. Return to previous menu\n");
                         printf(">>>>> Your choice: ");
                         scanf(" %d", &filterChoice);
-                
+                        
+                        //switch choice for the filter to be applied
                         switch (filterChoice) {
+                            //negative filter
                             case 1:
                                 bmp8_negative(image);
                                 printf("Negative filter applied.\n");
                                 break;
-                
+                            
+                            //brghtness filter
                             case 2:
                                 printf("Enter brightness adjustment value (-100 to 100): ");
                                 scanf("%d", &bright);
@@ -105,7 +114,8 @@ int main() {
                                     printf("Brightness filter applied.\n");
                                 }
                                 break;
-                
+                            
+                            //threshold filter
                             case 3:
                                 printf("Enter threshold (0-255): ");
                                 scanf("%d", &thresh);
@@ -116,27 +126,32 @@ int main() {
                                     printf("Threshold filter applied.\n");
                                 }
                                 break;
-                
+                            
+                            //boxe blur filter
                             case 4:
                                 bmp8_boxblur(image);
                                 printf("Box blur filter applied.\n");
                                 break;
-                
+                            
+                            //gaussian filter
                             case 5:
                                 bmp8_gaussian(image);
                                 printf("Gaussian filter applied.\n");
                                 break;
-
+                            
+                            //outline filter
                             case 6:
                                 bmp8_outline(image);
                                 printf("Outline filter applied.\n");
                                 break;
-
+                            
+                            //emboss filter
                             case 7:
                                 bmp8_emboss(image);
                                 printf("Emboss filter applied.\n");
                                 break;
-                            
+                                
+                            //equalize filter
                             case 8:
                                 unsigned int *histogram = bmp8_computeHistogram(image);
                                 unsigned int *hist_eq = bmp8_computeCDF(histogram);
@@ -146,18 +161,20 @@ int main() {
                                 printf("Equalization filter applied.\n");
                                 break;
 
-                
+                            //return to the previous menu
                             case 9: 
                                 printf("Returning to main menu.\n");
                                 break;
-                
+                            
+                            //if choice is over 9
                             default:
                                 printf("Invalid filter choice. Please choose a valid option.\n");
                                 break;
                         }
                     }
                     break;
-
+                
+                //to display the information of the image bmp8
                 case 4:
                     if (!image) {
                         printf("No image loaded, can't display info.\n");
@@ -166,6 +183,7 @@ int main() {
                     }
                     break;
 
+                //to exit the prog
                 case 5:
                     run = 0;
                     if (image) {
@@ -173,7 +191,8 @@ int main() {
                     }
                     printf("Exiting program.\n");
                     break;
-
+                
+                //if hte choice is over 5
                 default:
                     printf("Invalid choice. Please enter a number between 1 and 5.\n");
                     break;
@@ -194,8 +213,9 @@ int main() {
             printf("\n>>>>> Your choice: ");
             scanf(" %d", &choice);
 
-
+            //switch for better logic for the menu choice
             switch (choice) {
+            //load he image
             case 1:
                 printf("Enter file path: ");
                 scanf(" %255s", filename);
@@ -211,7 +231,8 @@ int main() {
                 }
                 
             break;
-
+            
+            //to save the image
             case 2:
                 if (!imagec) {
                     printf("No image loaded, can't save the image.\n");
@@ -224,6 +245,7 @@ int main() {
                 }
                 break;
             
+            //to apply a filter 
             case 3:
 
             if (!imagec) {
@@ -241,13 +263,15 @@ int main() {
                 printf(">>>>> Your choice: ");
                 scanf("%d", &filterChoice);
 
-
+                //switch menu for the choice of the filter
                 switch (filterChoice) {
+                    //negative filter
                     case 1:
                         bmp24_negative(imagec);
                         printf("Negative filter applied.\n");
                         break;
 
+                    //brightness filter
                     case 2:
                         printf("Enter brightness adjustment value: ");
                         scanf("%d", &bright);
@@ -256,6 +280,7 @@ int main() {
                         printf("Brightness filter applied.\n");
                         break;
 
+                    //graysacle filter
                     case 3:
                         printf("Enter grayscale: ");
                         scanf("%d", &thresh);
@@ -264,30 +289,36 @@ int main() {
                         printf("Threshold filter applied.\n");
                         break;
 
+                    //boxblur filter
                     case 4:
                         bmp24_boxBlur(imagec);
                         printf("Box blur applied.\n");
                     break;
                     
+                    //gaussian blur filter
                     case 5:
                         bmp24_gaussianBlur(imagec);
                         printf("Gaussian blur applied.\n");
                     break;
 
+                    //outline filter
                     case 6:
                         bmp24_outline(imagec);
                         printf("Outline filter applied.\n");
-                    break;
+                    break;  
 
+                    //emboss filter
                     case 7:
                         bmp24_emboss(imagec);
                         printf("Emboss filter applied.\n");
                     break;
 
+                    //returning the the previous menu
                     case 8:
                         printf("Returning to the previous menu...\n");
                         return 0;
 
+                    //if choice is over 9
                     default:
                         printf("Invalid filter choice.\n");
                         break;
@@ -296,6 +327,7 @@ int main() {
 
             break;
 
+            //to exit the prog
             case 4:
                 run = 0;
                 if (imagec) {
@@ -305,6 +337,7 @@ int main() {
             
             break;
             
+            //if choice is over 4
             default:
                 printf("Invalid choice. Please enter a number between 1 and 5.\n");
 

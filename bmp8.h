@@ -11,6 +11,7 @@ typedef struct {
     unsigned int dataSize;
     } t_bmp8;
 
+//to load an image
 t_bmp8 *bmp8_loadImage(const char *filename);
 //To savec an image
 void bmp8_saveImage(const char * filename, t_bmp8 * img);
@@ -38,11 +39,11 @@ void bmp8_gaussian(t_bmp8 * img);
 void bmp8_emboss(t_bmp8 * img);
 //outline function filter
 void bmp8_outline(t_bmp8 * img);
-
+//function to compute the historgram
 unsigned int * bmp8_computeHistogram(t_bmp8 * img);
-
+//function to compute CDF
 unsigned int * bmp8_computeCDF(unsigned int * hist);
-
+//function to equalize (filter)
 void bmp8_equalize(t_bmp8 * img, unsigned int * hist_eq);
 
 
