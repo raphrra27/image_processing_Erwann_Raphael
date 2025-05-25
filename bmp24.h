@@ -1,3 +1,8 @@
+/////////////////HEADER////////////////
+//Authors: Riera Raphael Briot Erwann//
+//Description: file .h for the colors images, so this is the header needed fo the bmp24, thus colored images//
+//Role: its the part 2 and 3 of the project so for colored image//
+
 #include <stdio.h>
 #include <stdint.h>
 #define BITMAP_MAGIC 0x00 // offset 0

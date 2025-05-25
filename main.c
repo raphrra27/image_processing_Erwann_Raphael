@@ -1,12 +1,15 @@
-//INCLUDES NEEDED
+/////////////////HEADER////////////////
+//Authors: Riera Raphael Briot Erwann//
+//Description: file main.c so its regroup all the functions writes and allow to actually use the prgram//
+//Role: its the main of the prog//
+//Execution: 1. "gcc main.c bmp8.c bmp24.c -o image_processing" then 2. "./image_processing"
 
+//INCLUDES NEEDED
 #include "bmp8.h"
 #include "bmp24.h"
 #include <stdio.h>
 #include <stdlib.h>
 
-//to launch gcc main.c bmp_8.c -o image_processing
-//then ./image_processing
 
 
 //MAIN

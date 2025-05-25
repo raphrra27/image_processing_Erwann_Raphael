@@ -1,3 +1,8 @@
+/////////////////HEADER////////////////
+//Authors: Riera Raphael Briot Erwann//
+//Description: header of the bmp8.c usefull for the main//
+//Role: its the part 1 and 3 of the project so for gray images//
+
 #include <stdio.h>
 
 //struct for the bmp8

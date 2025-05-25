@@ -1,3 +1,8 @@
+/////////////////HEADER////////////////
+//Authors: Riera Raphael Briot Erwann//
+//Description: file .c for the colors images, so it define all the function needed fo the bmp24, thus colored images//
+//Role: its the part 2 and 3 of the project so for colored image//
+
 #include "bmp24.h"
 #include <stdlib.h>
 #include <string.h>
