@@ -187,7 +187,7 @@ t_bmp24 *bmp24_loadImage(const char *filename) {
 
 
 
-//function that  
+//function that takes as parameters a pointer to a t_bmp24 element and a filename.
 void bmp24_saveImage(t_bmp24 *img, const char *filename) {
     FILE *file = fopen(filename, "wb");
 
