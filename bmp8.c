@@ -39,7 +39,8 @@ float valuesEmboss[3][3] = {
 
 //FUNCTIONS
 
-//function that load the image bmp8 so the image with no colors
+//function that takes as parameter a filename.
+//It loads a BMP image from the specified file and returns a pointer to a t_bmp8 structure containing the image data.
 t_bmp8 *bmp8_loadImage(const char *filename) {
     FILE *image = fopen(filename, "rb");
 
@@ -94,7 +95,8 @@ t_bmp8 *bmp8_loadImage(const char *filename) {
     return bmpImage;
 }
 
-//function save image in bmp format (NEEDED)
+//function that takes as parameters a filename and a pointer to a t_bmp8 structure.
+//It saves the BMP image data from the t_bmp8 structure to the specified file.
 void bmp8_saveImage(const char * filename, t_bmp8 * img) {
     //open the file for writing in binary mode
     FILE *file = fopen(filename, "wb");
@@ -134,19 +136,21 @@ void bmp8_saveImage(const char * filename, t_bmp8 * img) {
 }
 
 
-//to free the memory of the momery allocated
+//function that takes as parameter an allocated t_bmp8 structure.
+//It frees the memory allocated for the t_bmp8 structure and its data.
 void bmp8_free(t_bmp8 * img){
     free(img->data);
     free(img);
 }
 
-//print the info of the image
+//function that prints the information of a t_bmp8 structure.
 void bmp8_printInfo(t_bmp8 * img){
     printf("Image Info\n    Width: %u\n    Height: %u\n    Color depth: %u\n    Datasize: %d\n      ", img->width, img->height, img->colorDepth, img->dataSize);
 }
 
 
-//negative function
+//function that takes as parameter a pointer to a t_bmp8 structure.
+//It applies a grayscale filter to the image by converting each pixel to its grayscale equivalent.
 void bmp8_negative(t_bmp8 * img){
     for (int i = 0; i < img->height; i++){
         for (int j = 0; j < img->width; j++){
@@ -155,7 +159,8 @@ void bmp8_negative(t_bmp8 * img){
     }
 }
 
-//brghtness function
+//function that takes as parameter a pointer to a t_bmp8 structure and a value.
+//It applies a brightness filter to the image by adjusting the brightness of each pixel by the specified value.
 void bmp8_brightness(t_bmp8 * img, int value){
     for (int i = 0; i < img->height; i++) {
         for (int j = 0; j < img->width; j++) {
@@ -173,7 +178,8 @@ void bmp8_brightness(t_bmp8 * img, int value){
     }
 }
 
-//threshold function
+//function that takes as parameter a pointer to a t_bmp8 structure and an integer threshold.
+//It applies a threshold filter to the image by setting pixels above the threshold to 255 and below to 0.
 void bmp8_threshold(t_bmp8 *img, int threshold) {
     for (int i = 0; i < img->height; i++) {
         for (int j = 0; j < img->width; j++) {
@@ -190,7 +196,8 @@ void bmp8_threshold(t_bmp8 *img, int threshold) {
 }
 
 
-//function that apply filter for the bmp8
+//function that  takes as parameters a pointer to a t_bmp8 structure, a kernel, and the size of the kernel.
+//It applies a filter to the image by convolving each pixel with the kernel.
 void bmp8_applyFilter(t_bmp8 * img, float ** kernel, int kernelSize) {
     //going through the whole image
     for (int y = 1; y < img->height-1; y++) {
@@ -222,7 +229,8 @@ void bmp8_applyFilter(t_bmp8 * img, float ** kernel, int kernelSize) {
 }
 
 
-//we need to find our pointer to pointer (one for free and one for dinamicly allocate memory)
+//function that takes as parameter a 2D array of float values.
+//It creates a kernel from the 2D array and returns a pointer to the kernel. it returns a pointer to the kernel
 float** createKernel(float values[3][3]) {
     float **kernel = malloc(3 * sizeof(float *));
     for (int i = 0; i < 3; i++) {
@@ -234,7 +242,8 @@ float** createKernel(float values[3][3]) {
     return kernel;
 }
 
-//free kernel for the apply filter
+//function that takes as parameter a pointer to a 2D array of floats representing a kernel.
+//It frees the memory allocated for the kernel.
 void freeKernel(float **kernel) {
     for (int i = 0; i < 3; i++) {
         free(kernel[i]);
@@ -243,7 +252,10 @@ void freeKernel(float **kernel) {
 }
 
 
-//function to apply the kernel (create and then apply it)
+//functions that takes as parameter a pointer to a t_bmp8 structure.
+//It applies various filters to the image, such as box blur, gaussian blur, outline, and emboss.
+
+
 void bmp8_boxblur(t_bmp8 * img){
     float **boxBlurKernel = createKernel(valuesBoxBlur);
     bmp8_applyFilter(img, boxBlurKernel, 3);
@@ -269,7 +281,8 @@ void bmp8_emboss(t_bmp8 * img){
 }
 
 
-//function to compute the histogram 
+//function that takes as parameter a pointer to a t_bmp8 structure.
+//It computes the histogram of the image and returns a pointer to an array containing the histogram values. 
 unsigned int * bmp8_computeHistogram(t_bmp8 * img) {
     unsigned int *histogram = (unsigned int*)calloc(256, sizeof(unsigned int));
 
@@ -291,7 +304,8 @@ unsigned int * bmp8_computeHistogram(t_bmp8 * img) {
 }
 
 
-//functions used to compute CDF
+//function that takes as parameter a pointer to an array containing the histogram values.
+//It computes the cumulative distribution function (CDF) from the histogram and returns a pointer to an array containing the CDF values.
 unsigned int * bmp8_computeCDF(unsigned int * hist) {
     unsigned int *cdf = (unsigned int*)calloc(256, sizeof(unsigned int));
 
@@ -309,7 +323,8 @@ unsigned int * bmp8_computeCDF(unsigned int * hist) {
 
 
 
-//functions to equalize the bmp8 file (filters)
+//function that takes as parameters a pointer to a t_bmp8 structure and a pointer to an array containing the CDF values.
+//It applies histogram equalization to the image using the CDF values.
 void bmp8_equalize(t_bmp8 *img, unsigned int *cdf) {
     unsigned int cdf_min = 0, totalPixels = img->width * img->height;
 
