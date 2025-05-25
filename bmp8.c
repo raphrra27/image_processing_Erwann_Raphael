@@ -255,8 +255,6 @@ void freeKernel(float **kernel) {
 
 //functions that takes as parameter a pointer to a t_bmp8 structure.
 //It applies various filters to the image, such as box blur, gaussian blur, outline, and emboss.
-
-
 void bmp8_boxblur(t_bmp8 * img){
     float **boxBlurKernel = createKernel(valuesBoxBlur);
     bmp8_applyFilter(img, boxBlurKernel, 3);
