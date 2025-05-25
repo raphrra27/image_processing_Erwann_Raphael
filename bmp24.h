@@ -3,6 +3,8 @@
 //Description: file .h for the colors images, so this is the header needed fo the bmp24, thus colored images//
 //Role: its the part 2 and 3 of the project so for colored image//
 
+
+//INCLUDE NEEDED + STRUCT
 #include <stdio.h>
 #include <stdint.h>
 #define BITMAP_MAGIC 0x00 // offset 0
@@ -61,7 +63,7 @@ typedef struct {
 #pragma pack(pop)
 
 
-//functions used in the bmp24.c
+//FUNCTIONS USED IN THE BMP24
 
 //function to read raw data from file
 t_pixel ** bmp24_allocateDataPixels (int width, int height);

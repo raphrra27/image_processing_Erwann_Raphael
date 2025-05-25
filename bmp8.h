@@ -3,6 +3,7 @@
 //Description: header of the bmp8.c usefull for the main//
 //Role: its the part 1 and 3 of the project so for gray images//
 
+//INCLUDE AND STRUCT
 #include <stdio.h>
 
 //struct for the bmp8
@@ -15,6 +16,9 @@ typedef struct {
     unsigned int colorDepth;
     unsigned int dataSize;
     } t_bmp8;
+
+
+//FUNCTION USED INT HTE BMP8
 
 //to load an image
 t_bmp8 *bmp8_loadImage(const char *filename);

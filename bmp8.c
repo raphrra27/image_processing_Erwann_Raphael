@@ -10,7 +10,7 @@
 #include <string.h>
 #include "bmp8.h"
 
-//Define all the kernel (with the values) needed for the filter (more clean for the main)
+//Define all the kernel (with the values) needed for the filter (more clean for the main
 float valuesBoxBlur[3][3] = {
     {1/9.0f, 1/9.0f, 1/9.0f},
     {1/9.0f, 1/9.0f, 1/9.0f},
@@ -39,8 +39,8 @@ float valuesEmboss[3][3] = {
 
 //FUNCTIONS
 
-//function that takes as parameter a filename.
-//It loads a BMP image from the specified file and returns a pointer to a t_bmp8 structure containing the image data.
+//function that load the image bmp8 so the image with no colors
+//It take as parameter a filename and return a pointer to the image
 t_bmp8 *bmp8_loadImage(const char *filename) {
     FILE *image = fopen(filename, "rb");
 
@@ -95,8 +95,8 @@ t_bmp8 *bmp8_loadImage(const char *filename) {
     return bmpImage;
 }
 
-//function that takes as parameters a filename and a pointer to a t_bmp8 structure.
-//It saves the BMP image data from the t_bmp8 structure to the specified file.
+//function save image in bmp format (NEEDED)
+//it take as parameter a filename and a pointer to the image
 void bmp8_saveImage(const char * filename, t_bmp8 * img) {
     //open the file for writing in binary mode
     FILE *file = fopen(filename, "wb");
@@ -136,21 +136,22 @@ void bmp8_saveImage(const char * filename, t_bmp8 * img) {
 }
 
 
-//function that takes as parameter an allocated t_bmp8 structure.
-//It frees the memory allocated for the t_bmp8 structure and its data.
+//to free the memory of the momery allocated
+//take as parameter a pointer to the image an free the image
 void bmp8_free(t_bmp8 * img){
     free(img->data);
     free(img);
 }
 
-//function that prints the information of a t_bmp8 structure.
+//print the info of the image
+//take as parameter the image and print the infos
 void bmp8_printInfo(t_bmp8 * img){
     printf("Image Info\n    Width: %u\n    Height: %u\n    Color depth: %u\n    Datasize: %d\n      ", img->width, img->height, img->colorDepth, img->dataSize);
 }
 
 
-//function that takes as parameter a pointer to a t_bmp8 structure.
-//It applies a grayscale filter to the image by converting each pixel to its grayscale equivalent.
+//negative function
+//take a pointer to the image and modify the values of the data pixels
 void bmp8_negative(t_bmp8 * img){
     for (int i = 0; i < img->height; i++){
         for (int j = 0; j < img->width; j++){
@@ -159,8 +160,8 @@ void bmp8_negative(t_bmp8 * img){
     }
 }
 
-//function that takes as parameter a pointer to a t_bmp8 structure and a value.
-//It applies a brightness filter to the image by adjusting the brightness of each pixel by the specified value.
+//brghtness function
+//take a pointer to the image and a value for the brgihtness and modify each pixels by adding the value 
 void bmp8_brightness(t_bmp8 * img, int value){
     for (int i = 0; i < img->height; i++) {
         for (int j = 0; j < img->width; j++) {
