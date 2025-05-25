@@ -1,3 +1,9 @@
+/////////////////HEADER////////////////
+//Authors: Riera Raphael Briot Erwann//
+//Description: file .c that define all the functions for gray image, thus bmp8 file//
+//Role: its the part 1 and 3of the project so for gray images//
+
+
 //INCLUDE + VARIABLES
 
 #include <stdlib.h>
